@@ -23,6 +23,7 @@ typedef int16_t  mrtk_i16_t;
 typedef uint8_t  mrtk_u8_t;
 typedef int8_t   mrtk_i8_t;
 
+typedef void      mrtk_void_t;
 typedef uint8_t   mrtk_bool_t;
 typedef char      mrtk_char_t;
 typedef uintptr_t mrtk_ptr_t; /**< 指针长度的无符号整数类型 */
