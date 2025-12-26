@@ -6,22 +6,36 @@
             "hidden": true,
             "generator": "Ninja",
             "binaryDir": "${sourceDir}/build/${presetName}",
-		    "toolchainFile": "${sourceDir}/cmake/gcc-arm-none-eabi.cmake",
+            "toolchainFile": "${sourceDir}/cmake/gcc-arm-none-eabi.cmake",
             "cacheVariables": {
+                "CMAKE_CROSSCOMPILING": "ON"
             }
         },
         {
             "name": "Debug",
             "inherits": "default",
             "cacheVariables": {
-                "CMAKE_BUILD_TYPE": "Debug"
+                "CMAKE_BUILD_TYPE": "Debug",
+                "CMAKE_CROSSCOMPILING": "ON"
             }
         },
         {
             "name": "Release",
             "inherits": "default",
             "cacheVariables": {
-                "CMAKE_BUILD_TYPE": "Release"
+                "CMAKE_BUILD_TYPE": "Release",
+                "CMAKE_CROSSCOMPILING": "ON"
+            }
+        },
+        {
+            "name": "host-tests",
+            "displayName": "本地主机测试模式 (GTest)",
+            "description": "使用本地编译器 (GCC/Clang) 运行测试",
+            "binaryDir": "build/tests",
+            "cacheVariables": {
+                "CMAKE_BUILD_TYPE": "Debug",
+                "BUILD_TESTING": "ON",
+                "CMAKE_CROSSCOMPILING": "OFF"
             }
         }
     ],
@@ -33,6 +47,18 @@
         {
             "name": "Release",
             "configurePreset": "Release"
+        }
+    ],
+    "testPresets": [
+        {
+            "name": "default",
+            "configurePreset": "host-tests",
+            "output": {
+                "outputOnFailure": true
+            },
+            "execution": {
+                "noTestsAction": "error"
+            }
         }
     ]
 }

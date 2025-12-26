@@ -1,0 +1,4 @@
+#ifndef MRTK_TYPEDEF_H
+#define MRTK_TYPEDEF_H
+
+#endif // MRTK_TYPEDEF_H

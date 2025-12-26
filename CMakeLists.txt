@@ -30,39 +30,47 @@ message("Build type: " ${CMAKE_BUILD_TYPE})
 
 # Enable CMake support for ASM and C languages
 enable_language(C ASM)
+# 启用测试功能ctest
+enable_testing()
 
-# Create an executable object type
-add_executable(${CMAKE_PROJECT_NAME})
+add_subdirectory(MRTK)
 
-# Add STM32CubeMX generated sources
-add_subdirectory(cmake/stm32cubemx)
+# 使用交叉编译工具链
+if(CMAKE_CROSSCOMPILING)
+    # Create an executable object type
+    add_executable(${CMAKE_PROJECT_NAME})
 
-# Link directories setup
-target_link_directories(${CMAKE_PROJECT_NAME} PRIVATE
-    # Add user defined library search paths
-)
+	# 使用交叉编译，STM32上运行
+    # Add STM32CubeMX generated sources
+    add_subdirectory(cmake/stm32cubemx)
 
-# Add sources to executable
-target_sources(${CMAKE_PROJECT_NAME} PRIVATE
-    # Add user sources here
-)
+    # Link directories setup
+    target_link_directories(${CMAKE_PROJECT_NAME} PRIVATE
+        # Add user defined library search paths
+    )
 
-# Add include paths
-target_include_directories(${CMAKE_PROJECT_NAME} PRIVATE
-    # Add user defined include paths
-)
+    # Add sources to executable
+    target_sources(${CMAKE_PROJECT_NAME} PRIVATE
+        # Add user sources here
+    )
 
-# Add project symbols (macros)
-target_compile_definitions(${CMAKE_PROJECT_NAME} PRIVATE
-    # Add user defined symbols
-)
+    # Add include paths
+    target_include_directories(${CMAKE_PROJECT_NAME} PRIVATE
+        # Add user defined include paths
+    )
 
-# Remove wrong libob.a library dependency when using cpp files
-list(REMOVE_ITEM CMAKE_C_IMPLICIT_LINK_LIBRARIES ob)
+    # Add project symbols (macros)
+    target_compile_definitions(${CMAKE_PROJECT_NAME} PRIVATE
+        # Add user defined symbols
+    )
 
-# Add linked libraries
-target_link_libraries(${CMAKE_PROJECT_NAME}
-    stm32cubemx
+    # Remove wrong libob.a library dependency when using cpp files
+    list(REMOVE_ITEM CMAKE_C_IMPLICIT_LINK_LIBRARIES ob)
 
-    # Add user defined libraries
-)
+    # Add linked libraries
+    target_link_libraries(${CMAKE_PROJECT_NAME}
+        stm32cubemx
+        mrtk_kernel
+        # Add user defined libraries
+    )
+endif()
