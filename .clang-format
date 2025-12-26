@@ -1,0 +1,78 @@
+---
+# 语言大类设置为 Cpp，同时涵盖了 C 和 C++ 语言
+Language: Cpp
+# 以 LLVM 样式作为基础底色，随后进行自定义修改
+BasedOnStyle: LLVM
+
+# --- 缩进与排版 ---
+# 设定缩进宽度为 4 个空格
+IndentWidth: 4
+# 设定 Tab 宽度为 4
+TabWidth: 4
+# 禁用 Tab，强制将所有缩进转换为物理空格，确保不同编辑器显示一致
+UseTab: Never
+# 每行代码的最大字符长度限制为 100
+ColumnLimit: 100
+
+# --- 括号与空格 (K&R/Linux 风格控制) ---
+# 括号内侧不留空格
+SpacesInParentheses: false
+# 方括号内侧不留空格
+SpacesInSquareBrackets: false
+# 结构体初始化列表内侧不留空格
+SpacesInContainerLiterals: false
+# 赋值操作符（=, += 等）两边必须保留空格
+SpaceBeforeAssignmentOperators: true
+# 函数名与左括号之间不留空格
+SpaceBeforeParens: ControlStatements 
+# 强制在 C 风格的类型转换后添加空格
+SpaceAfterCStyleCast: true
+
+# --- 强制添加大括号 ---
+# 即使是单行语句，也强制为 if, else, for, while, do 添加大括号
+InsertBraces: true
+
+# --- 大括号换行风格 ---
+# 启用自定义大括号换行规则
+BreakBeforeBraces: Custom
+# 大括号换行的具体细节配置
+BraceWrapping:
+  # 函数定义的大括号另起一行（Linux 内核标准做法）
+  AfterFunction: true
+  # if/while/for 等控制语句的大括号不换行，紧跟在括号后
+  AfterControlStatement: false
+  # 结构体定义的大括号不换行
+  AfterStruct: false
+  # else 关键字紧跟在 if 的右大括号之后，不另起一行
+  BeforeElse: false
+
+# --- 物理对齐 ---
+# 连续的多行宏定义垂直对齐
+AlignConsecutiveMacros: true
+# 连续的多行赋值语句垂直对齐
+AlignConsecutiveAssignments: true
+# 连续的多行变量声明垂直对齐
+AlignConsecutiveDeclarations: true
+# 指针符号 * 靠右对齐，紧贴变量名，例如：char *ptr;
+PointerAlignment: Right
+
+# --- 现代工程化细节 ---
+# 即使代码很短，也不允许 if 语句写在同一行
+AllowShortIfStatementsOnASingleLine: false
+# 即使代码很短，也不允许循环语句写在同一行
+AllowShortLoopsOnASingleLine: false
+# 禁止将简短的函数写在同一行
+AllowShortFunctionsOnASingleLine: None
+# 自动按照字母顺序对 #include 包含文件进行排序，避免重复和混乱
+SortIncludes: true
+# 在代码块（如 if 体）的起始位置禁止出现多余空行
+KeepEmptyLinesAtTheStartOfBlocks: false
+
+# --- 注释格式化设置 ---
+# 允许对注释进行重排。如果注释行超过 ColumnLimit，它会自动折行
+ReflowComments: true
+# 强制将行尾注释对齐（让代码看起来非常整齐）
+AlignTrailingComments: true
+# 识别特定的注释前缀，防止 clang-format 破坏 Doxygen 的特殊指令
+# 这里告诉工具不要打断以 @ 或 \ 开头的 Doxygen 指令行
+CommentPragmas: '^ [@\\]'

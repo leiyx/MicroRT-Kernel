@@ -1,0 +1,11 @@
+# 忽略所有驱动库文件
+Drivers/
+Middlewares/
+Core/
+
+# 忽略 CubeMX 生成的启动文件和链接脚本
+*.s
+*.ld
+
+# 忽略特定的第三方组件
+Third_Party/
