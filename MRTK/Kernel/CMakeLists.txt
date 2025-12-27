@@ -2,6 +2,7 @@ add_library(mrtk_kernel STATIC)
 
 target_sources(mrtk_kernel PRIVATE
     ${CMAKE_CURRENT_SOURCE_DIR}/Src/mrtk_task.c
+    ${CMAKE_CURRENT_SOURCE_DIR}/Src/mrtk_irq.c
     # ${CMAKE_CURRENT_SOURCE_DIR}/Port/hw_stm32f407.S
 )
 
