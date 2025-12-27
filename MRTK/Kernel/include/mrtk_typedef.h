@@ -29,6 +29,9 @@ typedef char      mrtk_char_t;
 typedef uintptr_t mrtk_ptr_t; /**< 指针长度的无符号整数类型 */
 typedef intptr_t  mrtk_off_t; /**< 用于表示指针偏移的有符号类型 */
 
+typedef long          mrtk_base_t;  /**< 用于表示一个寄存器宽度的有符号整数 */
+typedef unsigned long mrtk_ubase_t; /**< 用于表示一个寄存器宽度的无符号整数 */
+
 /* --- RTOS 特有类型 --- */
 typedef uint32_t mrtk_tick_t; /**< 系统滴答计数类型 */
 typedef uint32_t mrtk_time_t; /**< 时间（毫秒）类型 */
