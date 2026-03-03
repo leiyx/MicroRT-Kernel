@@ -1,0 +1,3 @@
+[submodule "mrtk"]
+	path = mrtk
+	url = https://github.com/leiyx/MicroRT-Kernel.git
