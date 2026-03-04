@@ -27,6 +27,7 @@ extern "C" {
 
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
+#include "mrtk.h"
 
 /* USER CODE END Includes */
 

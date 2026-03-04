@@ -21,6 +21,8 @@
 
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
+#include "mrtk.h"
+#include <stdio.h>
 
 /* USER CODE END Includes */
 
@@ -57,6 +59,70 @@ static void MX_USART1_UART_Init(void);
 /* Private user code ---------------------------------------------------------*/
 /* USER CODE BEGIN 0 */
 
+int _write(int file, char *ptr, int len)
+{
+    // 把 ptr 指向的 len 个字节，通过 huart1 发送出去
+    HAL_UART_Transmit(&huart1, (uint8_t *)ptr, len, HAL_MAX_DELAY);
+    return len;
+}
+
+/* 三选一简单测试 */
+/* 延时api使用 */
+// #define DELAY_API_TEST 1
+/* 相同优先级时间片轮转 */
+// #define EQUAL_PRIO_TEST 1
+/* 不同优先级高优先级优先抢占 */
+#define EQUAL_PRIO_TEST 0
+
+#if (DELAY_API_TEST == 1)
+
+static void task1_entry(void *para) {
+  while(1) {
+    mrtk_schedule_lock();
+    printf("task1 - tick cnt: %lu \r\n", g_mrtk_tick);
+    mrtk_schedule_unlock();
+    mrtk_task_delay(MRTK_SEC_TO_TICK(1));
+  }
+}
+
+static void task2_entry(void *para) {
+  while(1) {
+    mrtk_schedule_lock();
+    printf("task2 - tick cnt: %lu \r\n", g_mrtk_tick);
+    mrtk_schedule_unlock();
+    mrtk_task_delay(MRTK_SEC_TO_TICK(2));
+  }
+}
+
+
+#else
+
+static void task1_entry(void *para) {
+  while(1) {
+      /* 锁定调度器，防止 printf 被任务切换打断 */
+      mrtk_schedule_lock();
+
+      printf("task1 - tick cnt: %lu \r\n", g_mrtk_tick);
+
+      /* 解锁调度器 */
+      mrtk_schedule_unlock();
+  }
+}
+
+static void task2_entry(void *para) {
+  while(1) {
+      /* 锁定调度器，防止 printf 被任务切换打断 */
+      mrtk_schedule_lock();
+
+      printf("task2 - tick cnt: %lu \r\n", g_mrtk_tick);
+
+      /* 解锁调度器 */
+      mrtk_schedule_unlock();
+  }
+}
+
+#endif
+
 /* USER CODE END 0 */
 
 /**
@@ -91,6 +157,21 @@ int main(void)
   MX_USART1_UART_Init();
   /* USER CODE BEGIN 2 */
 
+  mrtk_system_init();
+
+#if (EQUAL_PRIO_TEST == 1)
+  mrtk_task_t *task1 = mrtk_task_create("task1", task1_entry, MRTK_NULL, 512, 5, 10);
+  mrtk_task_start(task1);
+  mrtk_task_t *task2 = mrtk_task_create("task2", task2_entry, MRTK_NULL, 512, 5, 10);
+  mrtk_task_start(task2);
+#else
+  mrtk_task_t *task1 = mrtk_task_create("task1", task1_entry, MRTK_NULL, 512, 4, 10);
+  mrtk_task_start(task1);
+  mrtk_task_t *task2 = mrtk_task_create("task2", task2_entry, MRTK_NULL, 512, 5, 10);
+  mrtk_task_start(task2);
+#endif
+
+  mrtk_system_start();
   /* USER CODE END 2 */
 
   /* Infinite loop */

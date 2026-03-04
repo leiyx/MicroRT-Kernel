@@ -12,7 +12,6 @@ set(CMAKE_C_STANDARD 11)
 set(CMAKE_C_STANDARD_REQUIRED ON)
 set(CMAKE_C_EXTENSIONS ON)
 
-
 # Define the build type
 if(NOT CMAKE_BUILD_TYPE)
     set(CMAKE_BUILD_TYPE "Debug")
@@ -37,23 +36,34 @@ add_executable(${CMAKE_PROJECT_NAME})
 # Add STM32CubeMX generated sources
 add_subdirectory(cmake/stm32cubemx)
 
+# STM32 项目设置为 EMBEDDED 模式（编译固件）
+set(MRTK_BUILD_MODE "EMBEDDED" CACHE STRING "MRTK build mode" FORCE)
+message(STATUS "STM32 Project: Setting MRTK_BUILD_MODE=EMBEDDED for firmware compilation")
+
+# 添加 MRTK 子目录（此时 MRTK_BUILD_MODE 已被设置）
+add_subdirectory(mrtk)
+
 # Link directories setup
 target_link_directories(${CMAKE_PROJECT_NAME} PRIVATE
+
     # Add user defined library search paths
 )
 
 # Add sources to executable
 target_sources(${CMAKE_PROJECT_NAME} PRIVATE
+
     # Add user sources here
 )
 
 # Add include paths
 target_include_directories(${CMAKE_PROJECT_NAME} PRIVATE
+
     # Add user defined include paths
 )
 
 # Add project symbols (macros)
 target_compile_definitions(${CMAKE_PROJECT_NAME} PRIVATE
+
     # Add user defined symbols
 )
 
@@ -63,6 +73,7 @@ list(REMOVE_ITEM CMAKE_C_IMPLICIT_LINK_LIBRARIES ob)
 # Add linked libraries
 target_link_libraries(${CMAKE_PROJECT_NAME}
     stm32cubemx
+    mrtk_kernel
 
     # Add user defined libraries
 )
