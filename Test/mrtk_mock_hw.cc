@@ -53,7 +53,7 @@ mrtk_void_t *mrtk_hw_stack_init(mrtk_void_t *entry, mrtk_void_t *parameter, mrtk
  * @brief Mock 函数: 关闭全局中断
  * @return mrtk_base_t 关闭前的中断状态
  */
-mrtk_base_t mrtk_hw_interrupt_disable(void)
+mrtk_ubase_t mrtk_hw_interrupt_disable(void)
 {
     if (g_mock_cpu_port) {
         return g_mock_cpu_port->mrtk_hw_interrupt_disable();
@@ -65,7 +65,7 @@ mrtk_base_t mrtk_hw_interrupt_disable(void)
  * @brief Mock 函数: 恢复全局中断
  * @param[in] level 之前保存的中断状态
  */
-void mrtk_hw_interrupt_enable(mrtk_base_t level)
+void mrtk_hw_interrupt_enable(mrtk_ubase_t level)
 {
     if (g_mock_cpu_port) {
         g_mock_cpu_port->mrtk_hw_interrupt_enable(level);

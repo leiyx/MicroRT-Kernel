@@ -77,19 +77,19 @@ typedef mrtk_void_t (*mrtk_task_entry_t)(mrtk_void_t *para);
 typedef struct mrtk_tcb_def {
     mrtk_obj_t obj; /**< 内核对象基类 */
 
-    /* 调度相关 */
-    mrtk_list_node_t sched_node;  /**< 任务节点（用于挂载到就绪队列或阻塞队列） */
-    mrtk_u8_t        priority;    /**< 任务优先级（数值越小优先级越高） */
-    mrtk_u8_t        state;       /**< 任务状态（见 mrtk_task_stat_t 枚举） */
-    mrtk_tick_t      init_tick;   /**< 任务初始时间片长度 */
-    mrtk_tick_t      remain_tick; /**< 任务剩余时间片长度 */
-
     /* 任务栈相关 */
     mrtk_u32_t       *stack_ptr;       /**< 栈顶指针（指向当前栈顶） */
     mrtk_u32_t       *stack_base;      /**< 任务栈基址（指向栈底） */
     mrtk_u32_t        stack_size;      /**< 任务栈大小（字节） */
     mrtk_task_entry_t task_entry;      /**< 任务入口函数指针 */
     mrtk_void_t      *task_entry_para; /**< 任务入口函数参数 */
+
+    /* 调度相关 */
+    mrtk_list_node_t sched_node;  /**< 任务节点（用于挂载到就绪队列或阻塞队列） */
+    mrtk_u8_t        priority;    /**< 任务优先级（数值越小优先级越高） */
+    mrtk_u8_t        state;       /**< 任务状态（见 mrtk_task_stat_t 枚举） */
+    mrtk_tick_t      init_tick;   /**< 任务初始时间片长度 */
+    mrtk_tick_t      remain_tick; /**< 任务剩余时间片长度 */
 
     /* 定时器相关 */
 #if (MRTK_USING_TIMER == 1)

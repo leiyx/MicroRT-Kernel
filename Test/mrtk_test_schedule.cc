@@ -62,6 +62,7 @@ class MrtkScheduleTest : public ::testing::Test {
         /* Step 1: 系统初始化（统一入口，包括调度器和全局变量） */
         mrtk_err_t ret = mrtk_system_init();
         ASSERT_EQ(ret, MRTK_EOK) << "系统初始化失败";
+        g_mrtk_started = MRTK_TRUE;
 
         g_CurrentTCB = mrtk_task_get_idle();
 

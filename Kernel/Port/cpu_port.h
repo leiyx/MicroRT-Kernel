@@ -47,15 +47,15 @@ mrtk_void_t *mrtk_hw_stack_init(mrtk_void_t *entry, mrtk_void_t *parameter, mrtk
 
 /**
  * @brief 关闭全局中断
- * @return mrtk_base_t 关闭前的中断状态 (PRIMASK 寄存器的值)
+ * @return mrtk_ubase_t 关闭前的中断状态 (PRIMASK 寄存器的值)
  */
-mrtk_base_t mrtk_hw_interrupt_disable(mrtk_void_t);
+mrtk_ubase_t mrtk_hw_interrupt_disable(mrtk_void_t);
 
 /**
  * @brief 恢复全局中断
  * @param[in] level 之前保存的中断状态
  */
-mrtk_void_t mrtk_hw_interrupt_enable(mrtk_base_t level);
+mrtk_void_t mrtk_hw_interrupt_enable(mrtk_ubase_t level);
 
 /**
  * @brief 在中断中触发上下文切换

@@ -17,9 +17,18 @@ target_sources(mrtk_kernel PRIVATE
     ${CMAKE_CURRENT_SOURCE_DIR}/Src/mrtk_system.c
     ${CMAKE_CURRENT_SOURCE_DIR}/Src/mrtk_printf.c
     ${CMAKE_CURRENT_SOURCE_DIR}/Src/mrtk_event.c
-
-    # ${CMAKE_CURRENT_SOURCE_DIR}/Port/hw_stm32f407.S
 )
+
+# 根据 BUILD_TESTING 决定是否包含硬件相关文件
+if(BUILD_TESTING)
+    message(STATUS "Kernel: TEST mode - Skipping hw_stm32f407.S")
+else()
+    message(STATUS "Kernel: EMBEDDED mode - Including hw_stm32f407.S")
+    target_sources(mrtk_kernel PRIVATE
+        ${CMAKE_CURRENT_SOURCE_DIR}/Port/hw_stm32f407.S
+        ${CMAKE_CURRENT_SOURCE_DIR}/Port/cpu_port.c
+    )
+endif()
 
 # PRIVATE: 编译该库时使用 include 目录
 # PUBLIC:  编译该库时使用，且任何链接该库的其他目标也会自动包含该目录

@@ -35,18 +35,15 @@ static mrtk_u8_t _mrtk_mutex_find_highest_inherited_prio(mrtk_task_t *task)
     mrtk_u8_t     highest_prio = task->orig_prio; /* 默认为任务的原始优先级 */
     mrtk_mutex_t *mutex;
     mrtk_task_t  *waiter;
-    mrtk_bool_t   has_waiter;
 
     MRTK_LIST_FOR_EACH(mutex, &task->held_mutex_list, mrtk_mutex_t, held_node)
     {
         /* 检查此互斥量的等待队列是否有任务 */
-        has_waiter = MRTK_FALSE;
         MRTK_LIST_FOR_EACH(waiter, &mutex->ipc_obj.suspend_taker, mrtk_task_t, sched_node)
         {
             /* 找到优先级最高的等待者 */
             if (mrtk_schedule_prio_ht(waiter, (mrtk_task_t *) &highest_prio)) {
                 highest_prio = waiter->priority;
-                has_waiter   = MRTK_TRUE;
             }
         }
     }

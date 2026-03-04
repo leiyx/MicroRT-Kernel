@@ -551,7 +551,6 @@ mrtk_err_t mrtk_task_set_priority(mrtk_task_t *task, mrtk_u8_t priority)
 
     mrtk_ubase_t level = mrtk_hw_interrupt_disable();
 
-    mrtk_u8_t old_prio      = task->priority;
     mrtk_u8_t need_schedule = MRTK_FALSE;
 
     if (task->state == MRTK_TASK_STAT_READY || task->state == MRTK_TASK_STAT_RUNNING) {

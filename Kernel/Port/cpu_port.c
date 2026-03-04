@@ -66,7 +66,7 @@ mrtk_ubase_t mrtk_hw_interrupt_disable(mrtk_void_t)
 mrtk_void_t mrtk_hw_interrupt_enable(mrtk_ubase_t level)
 {
     /* 恢复 PRIMASK 的值 */
-    __asm volatile("msr primask, %0" : : "r"(level) : : "memory");
+    __asm volatile("msr primask, %0" : : "r"(level) : "memory");
 }
 
 mrtk_void_t mrtk_hw_context_switch_interrupt(mrtk_void_t)
@@ -95,9 +95,11 @@ mrtk_void_t mrtk_hw_output_string(const mrtk_char_t *str)
         return;
     }
 
+    #ifdef BUILD_TESTING
     /* 默认实现：使用标准库 putchar（测试环境） */
     while (*str != '\0') {
         putchar((int) *str);
         str++;
     }
+    #endif
 }

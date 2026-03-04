@@ -176,6 +176,13 @@ mrtk_void_t mrtk_schedule(mrtk_void_t)
 {
     mrtk_base_t level = mrtk_hw_interrupt_disable();
 
+    /* 0. 系统未启动时不执行实际调度，仅设置延迟调度标志 */
+    if (g_mrtk_started == MRTK_FALSE) {
+        g_need_schedule = MRTK_TRUE;
+        mrtk_hw_interrupt_enable(level);
+        return;
+    }
+
     /* 1. 若在中断上下文中，设置延迟调度标志，退出最外层中断时触发调度 */
     /* 2. 若调度器已上锁，设置延迟调度标志，调度器解锁时触发调度 */
     if (g_interrupt_nest > 0 || g_schedule_lock_nest > 0) {
@@ -263,13 +270,11 @@ mrtk_void_t mrtk_tick_increase(mrtk_void_t)
 {
     mrtk_base_t level = mrtk_hw_interrupt_disable();
     g_mrtk_tick++;
-    mrtk_hw_interrupt_enable(level);
 
 #if (MRTK_USING_TIMER == 1)
     /* 扫描硬定时器链表，触发到期的硬定时器回调 */
     mrtk_timer_hard_check();
 #endif
-    level = mrtk_hw_interrupt_disable();
 
     /* 时间片轮转实现 */
     if (g_CurrentTCB != MRTK_NULL) {

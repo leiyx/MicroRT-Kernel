@@ -27,7 +27,10 @@
  * 全局变量定义
  * ============================================================================== */
 
-static mrtk_u8_t g_heap_buffer[MRTK_HEAP_SIZE];
+// mrtk_u8_t g_heap_buffer[MRTK_HEAP_SIZE];
+__attribute__((section(".ccmram"))) mrtk_u8_t g_heap_buffer[MRTK_HEAP_SIZE];
+
+
 
 /** 堆的起始地址（对齐后） */
 mrtk_u8_t *heap_base_addr = MRTK_NULL;

@@ -22,6 +22,74 @@ extern "C" {
 #define MRTK_WAITING_FOREVER -1
 
 /* ==============================================================================
+ * 时间单位转换宏 (Time Unit Conversion Macros)
+ * ============================================================================== */
+
+/**
+ * @brief 将 Tick 转换为毫秒
+ * @param tick Tick 数值
+ * @return 对应的毫秒数
+ * @note 计算公式：(tick) * 1000 / MRTK_TICK_PER_SECOND
+ */
+#define MRTK_TICK_TO_MS(tick) ((tick) * 1000UL / MRTK_TICK_PER_SECOND)
+
+/**
+ * @brief 将毫秒转换为 Tick（四舍五入）
+ * @param ms 毫秒数值
+ * @return 对应的 Tick 数值
+ * @note 计算公式：(ms) * MRTK_TICK_PER_SECOND / 1000
+ */
+#define MRTK_MS_TO_TICK(ms) ((ms) * MRTK_TICK_PER_SECOND / 1000UL)
+
+/**
+ * @brief 将毫秒转换为 Tick（向下取整）
+ * @param ms 毫秒数值
+ * @return 对应的 Tick 数值（向下取整）
+ * @note 适用于需要确保等待时间不超过指定毫秒数的场景
+ */
+#define MRTK_MS_TO_TICK_FLOOR(ms) ((ms) * MRTK_TICK_PER_SECOND / 1000UL)
+
+/**
+ * @brief 将毫秒转换为 Tick（向上取整）
+ * @param ms 毫秒数值
+ * @return 对应的 Tick 数值（向上取整）
+ * @note 适用于需要确保等待时间至少达到指定毫秒数的场景
+ */
+#define MRTK_MS_TO_TICK_CEIL(ms) (((ms) * MRTK_TICK_PER_SECOND + 1000UL - 1) / 1000UL)
+
+/**
+ * @brief 将 Tick 转换为秒
+ * @param tick Tick 数值
+ * @return 对应的秒数
+ * @note 计算公式：(tick) / MRTK_TICK_PER_SECOND
+ */
+#define MRTK_TICK_TO_SEC(tick) ((tick) / MRTK_TICK_PER_SECOND)
+
+/**
+ * @brief 将秒转换为 Tick
+ * @param sec 秒数值
+ * @return 对应的 Tick 数值
+ * @note 计算公式：(sec) * MRTK_TICK_PER_SECOND
+ */
+#define MRTK_SEC_TO_TICK(sec) ((sec) * MRTK_TICK_PER_SECOND)
+
+/**
+ * @brief 将秒转换为毫秒
+ * @param sec 秒数值
+ * @return 对应的毫秒数
+ * @note 计算公式：(sec) * 1000
+ */
+#define MRTK_SEC_TO_MS(sec) ((sec) * 1000UL)
+
+/**
+ * @brief 将毫秒转换为秒（向下取整）
+ * @param ms 毫秒数值
+ * @return 对应的秒数（向下取整）
+ * @note 计算公式：(ms) / 1000
+ */
+#define MRTK_MS_TO_SEC(ms) ((ms) / 1000UL)
+
+/* ==============================================================================
  * 定时器标志位定义
  * ============================================================================== */
 

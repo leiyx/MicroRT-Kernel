@@ -20,7 +20,7 @@ extern "C" {
  * 架构对齐配置 (Architecture Alignment)
  *----------------------------------------------------------------------------*/
 
-/**< 内存对齐字节数。针对 Cortex-M4 FPU，必须为 8 字节对齐 */
+/**< 内存对齐字节数 */
 #define MRTK_ALIGN_SIZE 4
 
 /**< CPU 是否支持 CLZ 指令 (Count Leading Zeros)

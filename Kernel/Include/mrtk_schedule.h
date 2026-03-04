@@ -88,10 +88,13 @@ extern mrtk_tcb_t *volatile g_CurrentTCB;
 extern mrtk_tcb_t *volatile g_NextTCB;
 
 /**
- * @brief 统一的位图查找表
- * @note 用于不支持硬件 CLZ 的 MCU (如 Cortex-M0) 实现 O(1) 查找
+ * @brief 系统启动标志
+ * @details 标识系统是否已经正式点火启动。
+ *          在系统未启动前，调度器不执行上下文切换，仅设置延迟调度标志。
+ *          此标志在 mrtk_system_start() 中设置为 MRTK_TRUE。
+ * @note 默认为 MRTK_FALSE，系统点火后置位
  */
-extern const mrtk_u8_t __bit_bitmap[];
+extern volatile mrtk_u8_t g_mrtk_started;
 
 /**
  * @brief 初始化调度器
@@ -119,12 +122,18 @@ mrtk_void_t _mrtk_schedule_remove_task(mrtk_task_t *task);
 /**
  * @brief 优先级比较，lhs优先级是否比rhs优先级更高
  * @param[in] lhs 任务
- * @param[in] rhs 任务
- * @retval MRTK_TRUE lhs 优先级高于 rhs
+ * @param[in] rhs 任务（可以为 NULL，表示系统未启动）
+ * @retval MRTK_TRUE lhs 优先级高于 rhs，或 rhs 为 NULL
  * @retval MRTK_FALSE lhs 优先级低于或等于 rhs
+ * @note 当 rhs 为 NULL 时，认为 lhs 优先级更高（需要调度）
  */
 static inline mrtk_bool_t mrtk_schedule_prio_ht(mrtk_task_t *lhs, mrtk_task_t *rhs)
 {
+    /* 处理 rhs 为 NULL 的情况（系统未启动时 g_CurrentTCB 为 NULL） */
+    if (rhs == MRTK_NULL) {
+        return MRTK_TRUE;
+    }
+
 #if (MRTK_PRIO_HIGHER_IS_LOWER_VALUE == MRTK_TRUE)
     /* 数值越小优先级越高 (0 为最高优先级) */
     return (lhs->priority < rhs->priority) ? MRTK_TRUE : MRTK_FALSE;
@@ -137,12 +146,18 @@ static inline mrtk_bool_t mrtk_schedule_prio_ht(mrtk_task_t *lhs, mrtk_task_t *r
 /**
  * @brief 优先级比较，lhs优先级是否比rhs优先级更低
  * @param[in] lhs 任务
- * @param[in] rhs 任务
+ * @param[in] rhs 任务（可以为 NULL，表示系统未启动）
  * @retval MRTK_TRUE lhs 优先级低于 rhs
- * @retval MRTK_FALSE lhs 优先级高于或等于 rhs
+ * @retval MRTK_FALSE lhs 优先级高于或等于 rhs，或 rhs 为 NULL
+ * @note 当 rhs 为 NULL 时，认为 lhs 优先级不低于 rhs（不需要调度）
  */
 static inline mrtk_bool_t mrtk_schedule_prio_lt(mrtk_task_t *lhs, mrtk_task_t *rhs)
 {
+    /* 处理 rhs 为 NULL 的情况（系统未启动时 g_CurrentTCB 为 NULL） */
+    if (rhs == MRTK_NULL) {
+        return MRTK_FALSE;
+    }
+
 #if (MRTK_PRIO_HIGHER_IS_LOWER_VALUE == MRTK_TRUE)
     /* 数值越小优先级越高 (0 为最高优先级) */
     return (lhs->priority > rhs->priority) ? MRTK_TRUE : MRTK_FALSE;

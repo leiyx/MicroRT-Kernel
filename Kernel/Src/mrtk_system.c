@@ -20,6 +20,15 @@
 #include "mrtk_schedule.h"
 #include "mrtk_task.h"
 
+/**
+ * @brief 系统启动标志
+ * @details 标识系统是否已经正式点火启动。
+ *          在系统未启动前，调度器不执行上下文切换，仅设置延迟调度标志。
+ *          此标志在 mrtk_system_start() 中设置为 MRTK_TRUE。
+ * @note 默认为 MRTK_FALSE，系统点火后置位
+ */
+volatile mrtk_u8_t g_mrtk_started = MRTK_FALSE;
+
 mrtk_err_t mrtk_system_init(mrtk_void_t)
 {
     mrtk_err_t ret;
@@ -68,6 +77,9 @@ mrtk_void_t mrtk_system_start(mrtk_void_t)
 {
     /* 关中断 */
     mrtk_hw_interrupt_disable();
+
+    /* 设置系统启动标志，允许调度器执行实际的任务切换 */
+    g_mrtk_started = MRTK_TRUE;
 
     /* 手动找出当前就绪队列里优先级最高的任务，赋值给 g_NextTCB */
     mrtk_u8_t         highest_prio          = _mrtk_schedule_get_highest_prio();
